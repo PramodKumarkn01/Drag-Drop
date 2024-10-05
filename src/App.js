@@ -3,6 +3,8 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import BuilderCanvas from './Components/BuilderCanvas';
 import ElementPanel from './Components/ElementPanel';
+import { TouchBackend } from 'react-dnd-touch-backend';
+import { MultiBackend, TouchTransition } from 'dnd-multi-backend';
 import ElementProperties from './Components/ElementProperties';
 import './styles/App.css';
 
@@ -25,6 +27,20 @@ const App = () => {
     ]);
   };
 
+  const backendOptions = {
+    backends: [
+      {
+        backend: HTML5Backend, // Use HTML5 backend for desktops
+      },
+      {
+        backend: TouchBackend, // Use Touch backend for mobile
+        options: { enableMouseEvents: true }, // Enable mouse events for better mobile interaction
+        preview: true,
+        transition: TouchTransition,
+      },
+    ],
+  };
+
   // Update properties for the selected element
   const updateProperties = (newProperties) => {
     setElements(
@@ -35,7 +51,7 @@ const App = () => {
   };
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={MultiBackend} options={backendOptions}>
       <div className="app">
         <ElementPanel />
         <BuilderCanvas
