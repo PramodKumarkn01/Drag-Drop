@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 
-const DraggableElement = ({ type, label }) => {
+const DraggableElement = ({ type, label, icon }) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'ELEMENT',
     item: { type },
@@ -13,17 +13,14 @@ const DraggableElement = ({ type, label }) => {
   return (
     <div
       ref={drag}
-      className="draggable-element"
+      className="bg-gray-300 p-4 flex items-center gap-2 justity-center rounded-md shadow-sm cursor-grab"
       style={{
         opacity: isDragging ? 0.5 : 1,
         cursor: 'move',
-        padding: '8px',
-        margin: '8px 0',
-        border: '1px solid #ddd',
-        background: '#f4f4f4',
       }}
     >
-      {label}
+      {icon}
+      <span className="text-sm font-medium">{label}</span>
     </div>
   );
 };

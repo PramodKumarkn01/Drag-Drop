@@ -6,7 +6,7 @@ const ElementProperties = ({ selectedElement, showAllFields }) => {
 
   useEffect(() => {
     if (selectedElement) {
-      reset(selectedElement); 
+      reset(selectedElement);
     }
   }, [selectedElement, reset]);
 
@@ -15,94 +15,62 @@ const ElementProperties = ({ selectedElement, showAllFields }) => {
   };
 
   return (
-    <div>
-      <style>
-        {`
-          .properties-panel {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 25px;
-            width: 100%; /* Set width to 40% */
-            margin: 20px auto; /* Center the panel */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            marginLeft:20px
-          }
-          .properties-panel h3 {
-            margin-bottom: 15px;
-            font-size: 1.5em;
-            color: #333;
-          }
-          .properties-panel label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
-          }
-          .properties-panel input[type="text"],
-          .properties-panel input[type="url"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-          }
-          .properties-panel button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s;
-          }
-          .properties-panel button:hover {
-            background-color: #0056b3;
-          }
-        `}
-      </style>
-
+    <div className="w-full p-4">
       {(selectedElement || showAllFields) && (
-        <form className="properties-panel" onSubmit={handleSubmit(onSubmit)}>
-          <h3>Edit Properties {showAllFields ? "for All Elements" : `for ${selectedElement.type} Element`}</h3>
+        <form
+          className="flex flex-col p-4 bg-gray-100 border border-gray-300 rounded-lg m-2 shadow-lg w-full md:w-2/3 lg:w-1/2 mx-auto"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <h3 className="mb-2 text-lg font-bold text-gray-800">
+            Edit Properties {showAllFields ? "for All Elements" : `for ${selectedElement.type} Element`}
+          </h3>
 
           {showAllFields || selectedElement.type === 'Text' ? (
-            <>
-              <label>Text</label>
-              <input type="text" {...register('text')} />
-            </>
+            <div className="flex flex-col mb-4">
+              <label className="mb-1 font-medium text-gray-700">Text</label>
+              <input
+                type="text"
+                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
+                {...register('text')}
+              />
+            </div>
           ) : null}
 
           {showAllFields || selectedElement.type === 'Image' ? (
-            <>
-              <label>Upload Image</label>
+            <div className="flex flex-col mb-4">
+              <label className="mb-1 font-medium text-gray-700">Upload Image</label>
               <input
                 type="file"
                 accept="image/*"
+                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
                 onChange={(e) => {
                   const file = e.target.files[0];
                   if (file) {
                     const reader = new FileReader();
                     reader.onload = () => {
-                      setValue('src', reader.result); 
+                      setValue('src', reader.result);
                     };
                     reader.readAsDataURL(file);
                   }
                 }}
               />
-            </>
+            </div>
           ) : null}
 
           {showAllFields || selectedElement.type === 'Button' ? (
-            <>
-              <label>Button Text</label>
-              <input type="text" {...register('buttonText')} />
-            </>
+            <div className="flex flex-col mb-4">
+              <label className="mb-1 font-medium text-gray-700">Button Text</label>
+              <input
+                type="text"
+                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-600"
+                {...register('buttonText')}
+              />
+            </div>
           ) : null}
 
-          <button type="submit">Save</button>
+          <button className="p-2 bg-blue-600 text-white font-semibold text-sm rounded-md hover:bg-blue-700 transition duration-300">
+            Save
+          </button>
         </form>
       )}
     </div>
