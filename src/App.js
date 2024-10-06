@@ -1,45 +1,46 @@
 import React, { useState } from 'react';
 import { DndProvider } from 'react-dnd';
+import { MultiBackend } from 'dnd-multi-backend';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { TouchBackend } from 'react-dnd-touch-backend';
+import { TouchTransition, createTransition } from 'dnd-multi-backend';
 import BuilderCanvas from './Components/BuilderCanvas';
 import ElementPanel from './Components/ElementPanel';
-import { TouchBackend } from 'react-dnd-touch-backend';
-import { MultiBackend, TouchTransition } from 'dnd-multi-backend';
-import ElementProperties from './Components/ElementProperties';
-import './styles/App.css'; // You can manage global styles here if needed
 import ElementEditor from './Components/ElementEditor';
+import './styles/App.css'; // You can manage global styles here if needed
 
 const App = () => {
   const [elements, setElements] = useState([]);
   const [selectedElement, setSelectedElement] = useState(null);
 
-  // Handle dropping elements onto the canvas
-  const handleDrop = (item, monitor) => {
-    const offset = monitor.getSourceClientOffset();
-    setElements([
-      ...elements,
-      {
-        id: Date.now(),
-        type: item.type,
-        left: offset ? offset.x : 0,
-        top: offset ? offset.y : 0,
-        properties: item.type === 'Text' ? { text: 'Sample Text' } : {},
-      },
-    ]);
-  };
-
+  // Define the multi-backend configuration for mobile and desktop support
   const backendOptions = {
     backends: [
       {
-        backend: HTML5Backend, // Use HTML5 backend for desktops
+        backend: HTML5Backend, // For desktop
+        transition: createTransition('desktop'),
       },
       {
-        backend: TouchBackend, // Use Touch backend for mobile
-        options: { enableMouseEvents: true }, // Enable mouse events for better mobile interaction
+        backend: TouchBackend, // For mobile
+        options: { enableMouseEvents: true },
         preview: true,
         transition: TouchTransition,
       },
     ],
+  };
+
+  // Handle dropping elements onto the canvas
+  const handleDrop = (item, monitor) => {
+    const offset = monitor.getSourceClientOffset();
+    const newElement = {
+      id: Date.now(),
+      type: item.type,
+      left: offset ? offset.x : 0,
+      top: offset ? offset.y : 0,
+      properties: item.type === 'Text' ? { text: 'Sample Text' } : {},
+    };
+
+    setElements([...elements, newElement]);
   };
 
   // Update properties for the selected element

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 
+
 const BuilderCanvas = () => {
   const [elements, setElements] = useState([]); // Track dropped elements
   const [selectedElement, setSelectedElement] = useState(null); // Track selected element for editing
